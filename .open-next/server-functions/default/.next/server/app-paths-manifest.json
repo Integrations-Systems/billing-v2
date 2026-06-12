@@ -1,0 +1,14 @@
+{
+  "/@navbar/page": "app/@navbar/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/login/route": "app/api/login/route.js",
+  "/api/logout/route": "app/api/logout/route.js",
+  "/api/sign-up/route": "app/api/sign-up/route.js",
+  "/dashboard/customers/page": "app/dashboard/customers/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/sign-up/page": "app/sign-up/page.js"
+}

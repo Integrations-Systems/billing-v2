@@ -168,17 +168,17 @@ export default function Home() {
           <Card>
             <CardHeader>
               <CardTitle>Starter</CardTitle>
-              <CardDescription>Ideal para freelancers</CardDescription>
+              <CardDescription>Ideal para freelancers y pequeños negocios.</CardDescription>
             </CardHeader>
 
             <CardContent>
-              <h3 className="text-5xl font-bold">$99</h3>
+              <h3 className="text-5xl font-bold">$0</h3>
               <p className="text-muted-foreground">MXN / mes</p>
 
               <ul className="mt-6 space-y-3 text-sm">
-                <li>✓ 100 CFDIs</li>
-                <li>✓ Clientes ilimitados</li>
-                <li>✓ XML y PDF</li>
+                <li className="flex flex-col">✓  Facturación CFDI 4.0 <span className="text-[11px]">(Costo por Timbre: $5.00 MXN)</span></li>
+                <li>✓ Descarga XML y PDF</li>
+                <li>✓ Soporte estándar</li>
               </ul>
 
               <Button className="mt-8 w-full">Comenzar</Button>
@@ -192,18 +192,19 @@ export default function Home() {
               </div>
 
               <CardTitle>Business</CardTitle>
-              <CardDescription>Para PyMEs</CardDescription>
+              <CardDescription>Para PyMEs y negocios en crecimiento</CardDescription>
             </CardHeader>
 
             <CardContent>
-              <h3 className="text-5xl font-bold">$299</h3>
+              <h3 className="text-5xl font-bold">$99</h3>
               <p className="text-muted-foreground">MXN / mes</p>
 
               <ul className="mt-6 space-y-3 text-sm">
-                <li>✓ Facturas ilimitadas</li>
-                <li>✓ Multiusuario</li>
-                <li>✓ Reportes</li>
-                <li>✓ Cancelaciones</li>
+                <li className="flex flex-col">✓  Facturación CFDI 4.0 <span className="text-[11px]">(Costo por Timbre: $3.00 MXN)</span></li>
+                <li>✓ Todo lo del plan starter</li>
+                <li>✓ Registro de clientes ilimitados</li>
+                <li>✓ Registro de productos ilimitados</li>
+                <li>✓ Soporte prioritario</li>
               </ul>
 
               <Button className="mt-8 w-full">Comenzar</Button>
@@ -221,10 +222,10 @@ export default function Home() {
               <p className="text-muted-foreground">MXN / mes</p>
 
               <ul className="mt-6 space-y-3 text-sm">
-                <li>✓ API</li>
-                <li>✓ Facturación masiva</li>
-                <li>✓ SLA</li>
-                <li>✓ Soporte prioritario</li>
+                <li className="flex flex-col">✓  Facturación CFDI 4.0 <span className="text-[11px]">(Costo por Timbre: $1.00 MXN)</span></li>
+                <li>✓ Todo el plan business</li>
+                <li>✓ Multiusuarios</li>
+                <li>✓ Soporte dedicado</li>
               </ul>
 
               <Button className="mt-8 w-full" variant="outline">
