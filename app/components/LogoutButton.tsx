@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function LogoutButton() {
       size="sm"
       onClick={logout}
     >
-      Logout
+      Cerrar sesión <ArrowRight />
     </Button>
   );
 }

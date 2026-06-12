@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cookies } from "next/headers";
 
 import ThemeToggle from "./ThemeToggle";
@@ -19,7 +20,17 @@ export default async function Header() {
 
       <div className="flex gap-2 items-center">
         {isAuthenticated ? (
-          <LogoutButton />
+          <>
+            <Image
+              src="/avatar.jpg"
+              alt="Avatar"
+              width={36}
+              height={36}
+              className="rounded-full border"
+            />
+
+            <LogoutButton />
+          </>
         ) : (
           <>
             <Button asChild size="sm">
