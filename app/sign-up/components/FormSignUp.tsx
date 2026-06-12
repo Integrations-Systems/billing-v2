@@ -2,6 +2,8 @@
 
 import { useSignUp } from "@/app/sign-up/hooks/useSignUp";
 import { registerSchema, SignUpFormData } from "@/app/sign-up/schemas/register-schema";
+import Link from "next/link";
+import { Label } from "@/components/ui/label"
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -187,6 +189,8 @@ export default function FormSignUp() {
                             "Registrarse"
                         )}
                     </Button>
+
+                    <Label className="w-full flex justify-center">¿Ya tienes una cuenta? <Link href="/login" className="underline">Inicia sesión aquí</Link></Label>
                 </form>
             </Form>
         </div>

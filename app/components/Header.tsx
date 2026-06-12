@@ -13,12 +13,12 @@ export default async function Header() {
   const isAuthenticated = !!token;
 
   return (
-    <header className="flex items-center justify-between gap-4 py-4">
+    <header className="flex flex-col gap-4 py-4 px-4 md:flex-row md:items-center md:justify-between">
       <Link className="text-lg font-bold" href="/">
         Billing v2.0.1
       </Link>
 
-      <div className="flex gap-2 items-center">
+      <div className="flex flex-wrap items-center gap-2 md:flex-nowrap">
         {isAuthenticated ? (
           <>
             <Image
@@ -34,7 +34,7 @@ export default async function Header() {
         ) : (
           <>
             <Button asChild size="sm">
-              <Link href="/login">Login</Link>
+              <Link href="/login">Iniciar sesión</Link>
             </Button>
 
             <Button asChild variant="outline" size="sm">

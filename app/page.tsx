@@ -15,6 +15,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+
 export default function Home() {
   return (
     <>
@@ -319,6 +325,79 @@ export default function Home() {
         </Accordion>
       </section>
 
+
+      {/* Team */}
+      <section className="container mx-auto max-w-7xl px-6 py-24">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold">
+            Construido por desarrolladores para negocios
+          </h2>
+
+          <p className="mt-4 text-muted-foreground">
+            Un equipo con experiencia en fintech, software y productos digitales.
+          </p>
+        </div>
+
+        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              name: "Miguel Castañeda",
+              role: "Software Engineer II",
+              company: "BBVA",
+              experience: "3 años de experiencia",
+              avatar: "/team/mike.png",
+            },
+            {
+              name: "Adan Palacios",
+              role: "Software Engineer Sr.",
+              company: "Mercado Libre",
+              experience: "7 años de experiencia",
+              avatar: "/team/adan.jpg",
+            },
+            {
+              name: "Gonzalo Hernández",
+              role: "Software Engineer II",
+              company: "BBVA",
+              experience: "4 años de experiencia",
+              avatar: "/team/carlos.jpg",
+            },
+          ].map((member) => (
+            <Card key={member.name}>
+              <CardContent className="flex flex-col items-center p-8 text-center">
+                <Avatar className="h-24 w-24">
+                  <AvatarImage
+                    src={member.avatar}
+                    alt={member.name}
+                  />
+                  <AvatarFallback>
+                    {member.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+
+                <h3 className="mt-6 text-xl font-semibold">
+                  {member.name}
+                </h3>
+
+                <p className="text-primary font-medium">
+                  {member.role}
+                </p>
+
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Actualmente en <strong>{member.company}</strong>
+                </p>
+
+                <div className="mt-4 rounded-full border px-3 py-1 text-xs">
+                  {member.experience}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="container mx-auto max-w-7xl px-6 pb-24">
         <Card>
@@ -339,6 +418,8 @@ export default function Home() {
           </CardContent>
         </Card>
       </section>
+
+
 
       {/* Footer */}
       <footer className="border-t">

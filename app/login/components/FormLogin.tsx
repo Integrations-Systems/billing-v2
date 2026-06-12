@@ -2,12 +2,14 @@
 
 import { useLogin } from "@/app/login/hooks/useLogin";
 import { loginSchema, LoginFormData } from "@/app/login/schemas/login-schema";
+import Link from "next/link";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label"
 
 import {
   Form,
@@ -126,6 +128,8 @@ export default function FormLogin() {
               "Iniciar sesión"
             )}
           </Button>
+
+          <Label className="w-full flex justify-center">¿Aún no tienes una cuenta? <Link href="/sign-up" className="underline">Regístrate aquí</Link></Label>
         </form>
       </Form>
     </div>
