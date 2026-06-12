@@ -1,8 +1,16 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
+import LogoutButton from "./LogoutButton";
 
-export default function Header() {
+export default async function Header() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token");
+
+  const isAuthenticated = !!token;
+
   return (
     <header className="flex items-center justify-between gap-4 py-4">
       <Link className="text-lg font-bold" href="/">
@@ -10,13 +18,19 @@ export default function Header() {
       </Link>
 
       <div className="flex gap-2 items-center">
-        <Button asChild size="sm">
-          <Link href="/login">Login</Link>
-        </Button>
+        {isAuthenticated ? (
+          <LogoutButton />
+        ) : (
+          <>
+            <Button asChild size="sm">
+              <Link href="/login">Login</Link>
+            </Button>
 
-        <Button asChild variant="outline" size="sm">
-          <Link href="/sign-up">Registrarse</Link>
-        </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/sign-up">Registrarse</Link>
+            </Button>
+          </>
+        )}
 
         <ThemeToggle />
       </div>

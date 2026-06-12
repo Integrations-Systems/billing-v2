@@ -1,21 +1,21 @@
 // hooks/useLogin.ts
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LoginFormData } from "@/app/login/schemas/login-schema";
+import { SignUpFormData } from "@/app/sign-up/schemas/register-schema";
 import { useRouter } from "next/navigation";
 
-export function useLogin() {
+export function useSignUp() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async (credentials: LoginFormData) => {
-      const response = await fetch("/api/login", {
+    mutationFn: async (body: SignUpFormData) => {
+      const response = await fetch("/api/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(body),
       });
 
       const json = await response.json();
@@ -29,10 +29,9 @@ export function useLogin() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["user_credentials"],
+        queryKey: ["user_info"],
       });
-      router.push("/dashboard");
-      router.refresh();
+      router.push("/login")
     },
   });
 }
