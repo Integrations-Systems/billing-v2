@@ -32,14 +32,24 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full mx-4 flex flex-col">
+      {/* Forzamos al body a medir exactamente el alto de la pantalla sin scroll general */}
+      <body className="w-full flex flex-col bg-background text-foreground h-full">
         <Providers>
           <ThemeProvider>
-            {navbar}
-            {children}
+            
+            {/* Contenedor del Navbar: flex-none evita que el sidebar lo colapse */}
+            <header className="w-full flex-none z-50 border-b p-2">
+              {navbar}
+            </header>
+            
+            {/* Contenedor del contenido: aquí entra tu dashboard layout */}
+            <div className="flex-1 w-full min-h-0 relative h-full">
+              {children}
+            </div>
+
           </ThemeProvider>
         </Providers>
       </body>
     </html>
   );
-}
+} 
