@@ -1,0 +1,14 @@
+{
+  "/@navbar/page": "/",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/login/route": "/api/login",
+  "/api/logout/route": "/api/logout",
+  "/api/sign-up/route": "/api/sign-up",
+  "/dashboard/customers/page": "/dashboard/customers",
+  "/dashboard/page": "/dashboard",
+  "/favicon.ico/route": "/favicon.ico",
+  "/login/page": "/login",
+  "/page": "/",
+  "/sign-up/page": "/sign-up"
+}
