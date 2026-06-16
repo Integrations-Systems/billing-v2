@@ -8,7 +8,7 @@ export function useCreateCustomer() {
     return useMutation({
         mutationFn: async (customer: Customer) => {
             const res: Response = await fetch(`/api/customers`, {
-                method: "PUT",
+                method: "POST",
                 body: JSON.stringify({
                     customer
                 })

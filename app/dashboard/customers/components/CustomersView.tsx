@@ -1,10 +1,19 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
+
 import CustomersTable from "./CustomersTable";
+import CustomerFormDialog from "./CustomerFormDialog";
+
 import { useGetStatusOnboarding } from "../hooks/queries/useOnboarding";
+import { useCustomers } from "../hooks/queries/useCustomers";
+import { useDeleteCustomer } from "../hooks/mutations/useDeleteCustomer";
+
+import { Customer } from "@/app/models/Customer";
 
 import { Button } from "@/components/ui/button";
+
 import {
     Card,
     CardContent,
@@ -13,43 +22,91 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-import { FileText, ArrowRight } from "lucide-react";
-
-import { useCustomers } from '../hooks/queries/useCustomers'
-import { Customer } from "@/app/models/Customer";
-import CustomerFormDialog from "./CustomerFormDialog";
+import {
+    FileText,
+    ArrowRight,
+    Plus,
+} from "lucide-react";
 
 export default function UsersView() {
+    const [openCreate, setOpenCreate] = useState(false);
+
     const [openEdit, setOpenEdit] = useState(false);
 
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+    const [selectedCustomer, setSelectedCustomer] =
+        useState<Customer | null>(null);
 
-    const { data: onboarding, isLoading: onboardinIsLoading } = useGetStatusOnboarding();
-    const { data: customers, isLoading: customersIsLoading } = useCustomers();
+    const {
+        data: onboarding,
+        isLoading: onboardingIsLoading,
+    } = useGetStatusOnboarding();
 
-    console.log(customers)
+    const {
+        data: customers,
+        isLoading: customersIsLoading,
+    } = useCustomers();
 
-    if (onboardinIsLoading || customersIsLoading) {
-        return <div>Cargando...</div>;
-    }
+    const deleteCustomer = useDeleteCustomer();
 
-
-    const handleEdit = (user: Customer) => {
-        setSelectedCustomer(user);
+    const handleEdit = (customer: Customer) => {
+        setSelectedCustomer(customer);
         setOpenEdit(true);
     };
+
+    const handleDelete = (customer: Customer) => {
+        const confirmed = window.confirm(
+            `¿Deseas eliminar a ${customer.legal_name}?`
+        );
+
+        if (!confirmed) return;
+
+        deleteCustomer.mutate(customer.id);
+    };
+
+    if (onboardingIsLoading || customersIsLoading) {
+        return <div>Cargando...</div>;
+    }
 
     return (
         <div>
             {onboarding === 2 ? (
                 <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl font-semibold">
+                                Clientes
+                            </h1>
+
+                            <p className="text-muted-foreground">
+                                Administra tus clientes y su información fiscal.
+                            </p>
+                        </div>
+
+                        <Button
+                            onClick={() =>
+                                setOpenCreate(true)
+                            }
+                        >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Nuevo cliente
+                        </Button>
+                    </div>
+
                     <CustomersTable
-                        users={customers.customers}
-                        onDelete={(user) => console.log(user)}
-                        onEdit={(user) => handleEdit(user)}
+                        users={customers?.customers ?? []}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
                     />
 
-                    {openEdit && selectedCustomer && (
+                    {/* CREATE */}
+                    <CustomerFormDialog
+                        mode="create"
+                        open={openCreate}
+                        onOpenChange={setOpenCreate}
+                    />
+
+                    {/* EDIT */}
+                    {selectedCustomer && (
                         <CustomerFormDialog
                             key={selectedCustomer.id}
                             mode="edit"
@@ -60,7 +117,7 @@ export default function UsersView() {
                     )}
                 </div>
             ) : (
-                <Card className="max-w-2xl blue-amber-200">
+                <Card className="max-w-2xl">
                     <CardHeader>
                         <div className="flex items-center gap-3">
                             <div className="rounded-lg bg-blue-100 p-3">
@@ -85,6 +142,7 @@ export default function UsersView() {
                         <Button asChild>
                             <Link href="/invoices">
                                 Continuar onboarding
+
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>

@@ -132,7 +132,7 @@ export default function CustomersTable({
               <TableHead>Teléfono</TableHead>
               <TableHead>Régimen Fiscal</TableHead>
               <TableHead>Estatus</TableHead>
-              <TableHead className="w-[120px] text-right">
+              <TableHead className="w-30 text-right">
                 Acciones
               </TableHead>
             </TableRow>

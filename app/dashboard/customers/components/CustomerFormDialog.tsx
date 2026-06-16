@@ -46,6 +46,7 @@ import { customerSchema } from "../schema/customerFormSchema";
 
 import { useCreateCustomer } from "../hooks/mutations/useCreateCustomer";
 import { useUpdateCustomer } from "../hooks/mutations/useUpdateCustomer";
+import { Spinner } from "@/components/ui/spinner";
 
 
 
@@ -160,10 +161,22 @@ export default function CustomerFormDialog({
         createCustomer.isPending ||
         updateCustomer.isPending;
 
+    const isError = createCustomer.isError ||
+        updateCustomer.isError;
+
+    const error = createCustomer.error ||
+        updateCustomer.error;
+
     return (
         <Dialog
             open={open}
-            onOpenChange={onOpenChange}
+            onOpenChange={(value) => {
+                if (!value) {
+                    form.reset();
+                }
+
+                onOpenChange(value);
+            }}
         >
             <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
                 <DialogHeader>
@@ -488,9 +501,9 @@ export default function CustomerFormDialog({
                             </CardContent>
                         </Card>
 
-                        {updateCustomer.isError && (
+                        {isError && (
                             <p className="text-sm text-destructive">
-                                {(updateCustomer.error as Error).message}
+                                {(error as Error).message}
                             </p>
                         )}
                         <div className="flex justify-end gap-2">
@@ -505,18 +518,22 @@ export default function CustomerFormDialog({
                                 Cancelar
                             </Button>
 
-                            <Button
-                                type="submit"
-                                disabled={isPending}
+                            <Button type="submit"
                             >
-                                {mode === "create"
-                                    ? "Crear cliente"
-                                    : "Guardar cambios"}
+
+                                {isPending ? (
+                                    <>
+                                        <Spinner data-icon="inline-start" />
+                                        <span className="ml-2">Cargando...</span>
+                                    </>
+                                ) : (
+                                    "Crear cliente"
+                                )}
                             </Button>
                         </div>
                     </form>
                 </Form>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     );
 }
