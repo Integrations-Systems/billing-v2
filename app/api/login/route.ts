@@ -5,7 +5,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email, password } = body;
 
-    const response = await fetch(`${process.env.HOST_PROD}/v1/auth/login`, {
+    console.log(process.env.HOST_PROD)
+
+    const response = await fetch(`http://78.14.5.157/v1/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -14,7 +16,11 @@ export async function POST(request: NextRequest) {
       }),
     })
 
+     console.log("RES", response)
+
     const json = await response.json()
+
+    console.log("JSON", json)
 
     if (!response.ok) {
       return NextResponse.json(

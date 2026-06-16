@@ -1,6 +1,6 @@
 name = "billing-app"
 main = ".open-next/worker.js"
-compatibility_date = "2026-06-16"
+compatibility_date = "2025-03-25"
 
 compatibility_flags = ["nodejs_compat"]
 
@@ -10,3 +10,7 @@ binding = "ASSETS"
 
 [vars]
 HOST_PROD = "http://78.14.5.157"
+
+[observability.logs]
+enabled = true
+invocation_logs = true
