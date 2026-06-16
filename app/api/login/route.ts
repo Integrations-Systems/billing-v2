@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
     const response = await fetch(`http://78.14.5.157/v1/auth/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
       body: JSON.stringify({
         "email": email,
         "password": password
