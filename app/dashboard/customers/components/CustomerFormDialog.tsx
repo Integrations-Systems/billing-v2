@@ -527,7 +527,7 @@ export default function CustomerFormDialog({
                                         <span className="ml-2">Cargando...</span>
                                     </>
                                 ) : (
-                                    "Crear cliente"
+                                    mode === "create" ? "Crear cliente" : "Actualizar cliente"
                                 )}
                             </Button>
                         </div>
