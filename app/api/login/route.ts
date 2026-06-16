@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
      console.log("RES", response)
 
-    const json = await response.json()
+    const json = await response.text()
 
     console.log("JSON", json)
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: json.error,
+          message: json,
         },
         {
           status: response.status,
@@ -37,21 +37,21 @@ export async function POST(request: NextRequest) {
     const res = NextResponse.json(
       {
         success: true,
-        message: json.message,
-        token: json.token,
-        expires_at: json.expires_at,
+        message: json,
+        token: json,
+        expires_at: json,
       },
       {
         status: response.status,
       }
     )
 
-    res.cookies.set("token", json.token, {
+    res.cookies.set("token", json, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      expires: new Date(json.expires_at),
+      expires: new Date(json),
     });
 
     return res;
