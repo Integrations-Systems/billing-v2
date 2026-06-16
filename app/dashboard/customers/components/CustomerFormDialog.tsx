@@ -78,6 +78,7 @@ export default function CustomerFormDialog({
             phone: "",
             address: {
                 street: "",
+                interior: "",
                 exterior: "",
                 neighborhood: "",
                 city: "",
@@ -100,6 +101,7 @@ export default function CustomerFormDialog({
                 address: {
                     street: user.address.street,
                     exterior: user.address.exterior,
+                    interior: user.address.interior,
                     neighborhood: user.address.neighborhood,
                     city: user.address.city,
                     municipality: user.address.municipality,
@@ -120,6 +122,7 @@ export default function CustomerFormDialog({
                 address: {
                     street: "",
                     exterior: "",
+                    interior: "",
                     neighborhood: "",
                     city: "",
                     municipality: "",
@@ -345,6 +348,26 @@ export default function CustomerFormDialog({
                                         <FormItem>
                                             <FormLabel>
                                                 Calle
+                                            </FormLabel>
+
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                />
+                                            </FormControl>
+
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="address.interior"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                No. Interior
                                             </FormLabel>
 
                                             <FormControl>

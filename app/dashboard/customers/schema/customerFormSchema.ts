@@ -25,6 +25,7 @@ export const customerSchema = z.object({
   address: z.object({
     street: z.string().min(1, "Calle requerida"),
     exterior: z.string().min(1, "Número exterior requerido"),
+    interior: z.string().min(1, "Número exterior requerido"),
     neighborhood: z.string().min(1, "Colonia requerida"),
     city: z.string().min(1, "Ciudad requerida"),
     municipality: z.string().min(1, "Municipio requerido"),

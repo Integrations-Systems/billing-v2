@@ -20,6 +20,7 @@ export interface Customer {
 export interface Address {
     street:       string;
     exterior:     string;
+    interior:     string;
     neighborhood: string;
     city:         string;
     municipality: string;
