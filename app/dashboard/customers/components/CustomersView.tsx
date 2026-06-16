@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import Link from "next/link";
 import CustomersTable from "./CustomersTable";
 import { useGetStatusOnboarding } from "../hooks/queries/useOnboarding";
@@ -16,8 +16,14 @@ import {
 import { FileText, ArrowRight } from "lucide-react";
 
 import { useCustomers } from '../hooks/queries/useCustomers'
+import { Customer } from "@/app/models/Customer";
+import CustomerFormDialog from "./CustomerFormDialog";
 
 export default function UsersView() {
+    const [openEdit, setOpenEdit] = useState(false);
+
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+
     const { data: onboarding, isLoading: onboardinIsLoading } = useGetStatusOnboarding();
     const { data: customers, isLoading: customersIsLoading } = useCustomers();
 
@@ -27,6 +33,12 @@ export default function UsersView() {
         return <div>Cargando...</div>;
     }
 
+
+    const handleEdit = (user: Customer) => {
+        setSelectedCustomer(user);
+        setOpenEdit(true);
+    };
+
     return (
         <div>
             {onboarding === 2 ? (
@@ -34,7 +46,18 @@ export default function UsersView() {
                     <CustomersTable
                         users={customers.customers}
                         onDelete={(user) => console.log(user)}
+                        onEdit={(user) => handleEdit(user)}
                     />
+
+                    {openEdit && selectedCustomer && (
+                        <CustomerFormDialog
+                            key={selectedCustomer.id}
+                            mode="edit"
+                            user={selectedCustomer}
+                            open={openEdit}
+                            onOpenChange={setOpenEdit}
+                        />
+                    )}
                 </div>
             ) : (
                 <Card className="max-w-2xl blue-amber-200">

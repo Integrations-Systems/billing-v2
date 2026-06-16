@@ -18,6 +18,7 @@ import {
 import decodeJwt from '@/app/utils/decodeJwt'
 import { Jwt } from "@/app/models/Jwt";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 export default async function Welcome() {
 
@@ -51,7 +52,7 @@ export default async function Welcome() {
                         </div>
 
                         <Button size="lg">
-                            Comenzar
+                            <Link href='dashboard/customers'>Comenzar</Link>
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </div>
