@@ -42,13 +42,12 @@ export async function GET() {
             customers: json.clients ?? [],
         }, { status: json.status });
 
-    } catch (err) {
+    } catch (err: unknown) {
 
-        return {
-            error: true,
-            message: 'Error inesperado: ' + err,
-            customers: []
-        };
+    return NextResponse.json(
+      { ok: false, message: 'Unexpected error', detail: String(err) },
+      { status: 500 }
+    );
     }
 }
 

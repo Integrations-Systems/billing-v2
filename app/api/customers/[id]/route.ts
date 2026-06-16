@@ -1,16 +1,11 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
 
 export async function PUT(
   req: Request,
-  { params }: Params) {
+  { params }: { params: Promise<{ id: string }> }
+) {
 
   const cookieStore = await cookies();
 
@@ -97,7 +92,7 @@ export async function PUT(
 }
 
 export async function DELETE(  req: Request,
-{ params }: Params) {
+ { params }: { params: Promise<{ id: string }> }) {
   const cookieStore = await cookies();
 
   const tokenCookie = cookieStore.get("token");
