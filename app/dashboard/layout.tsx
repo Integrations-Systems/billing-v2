@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Sidebar from "./components/Sidebar";
 import MobileSidebar from "./components/MobileSidebar";
+import { Toaster } from "@/components/ui/sonner"
 
 interface DashboardLayoutProps {
     children: ReactNode;
@@ -10,7 +11,8 @@ export default function DashboardLayout({
     children,
 }: DashboardLayoutProps) {
     return (
-        <div className="flex min-h-[calc(100dvh-72px)]">      
+        <div className="flex min-h-[calc(100dvh-72px)]">  
+        <Toaster />    
         <aside className="hidden md:flex">
             <Sidebar />
         </aside>

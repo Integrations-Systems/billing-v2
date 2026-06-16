@@ -23,6 +23,17 @@ import {
 } from "@/components/ui/card";
 
 import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+import {
     FileText,
     ArrowRight,
     Plus,
@@ -33,8 +44,14 @@ export default function UsersView() {
 
     const [openEdit, setOpenEdit] = useState(false);
 
+    const [openDelete, setOpenDelete] = useState(false);
+
     const [selectedCustomer, setSelectedCustomer] =
         useState<Customer | null>(null);
+
+    const [customerToDelete, setCustomerToDelete] =
+        useState<Customer | null>(null);
+
 
     const {
         data: onboarding,
@@ -54,15 +71,20 @@ export default function UsersView() {
     };
 
     const handleDelete = (customer: Customer) => {
-        const confirmed = window.confirm(
-            `¿Deseas eliminar a ${customer.legal_name}?`
-        );
-
-        if (!confirmed) return;
-
-        deleteCustomer.mutate(customer.id);
+        setCustomerToDelete(customer);
+        setOpenDelete(true);
     };
 
+    const confirmDelete = () => {
+        if (!customerToDelete) return;
+
+        deleteCustomer.mutate(customerToDelete.id, {
+            onSuccess: () => {
+                setOpenDelete(false);
+                setCustomerToDelete(null);
+            },
+        });
+    };
     if (onboardingIsLoading || customersIsLoading) {
         return <div>Cargando...</div>;
     }
@@ -83,9 +105,7 @@ export default function UsersView() {
                         </div>
 
                         <Button
-                            onClick={() =>
-                                setOpenCreate(true)
-                            }
+                            onClick={() => setOpenCreate(true)}
                         >
                             <Plus className="mr-2 h-4 w-4" />
                             Nuevo cliente
@@ -112,9 +132,58 @@ export default function UsersView() {
                             mode="edit"
                             user={selectedCustomer}
                             open={openEdit}
-                            onOpenChange={setOpenEdit}
+                            onOpenChange={(open) => {
+                                setOpenEdit(open);
+
+                                if (!open) {
+                                    setSelectedCustomer(null);
+                                }
+                            }}
                         />
                     )}
+
+                    {/* DELETE */}
+                    <AlertDialog
+                        open={openDelete}
+                        onOpenChange={(open) => {
+                            setOpenDelete(open);
+
+                            if (!open) {
+                                setCustomerToDelete(null);
+                            }
+                        }}
+                    >
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    ¿Eliminar cliente?
+                                </AlertDialogTitle>
+
+                                <AlertDialogDescription>
+                                    {customerToDelete
+                                        ? `Esta acción eliminará permanentemente a "${customerToDelete.legal_name}". Esta acción no se puede deshacer.`
+                                        : "Esta acción no se puede deshacer."}
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>
+                                    Cancelar
+                                </AlertDialogCancel>
+
+                                <AlertDialogAction
+                                    onClick={confirmDelete}
+                                    disabled={
+                                        deleteCustomer.isPending
+                                    }
+                                >
+                                    {deleteCustomer.isPending
+                                        ? "Eliminando..."
+                                        : "Eliminar"}
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             ) : (
                 <Card className="max-w-2xl">

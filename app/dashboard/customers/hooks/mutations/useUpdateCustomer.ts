@@ -7,7 +7,6 @@ export function useUpdateCustomer() {
 
     return useMutation({
         mutationFn: async (customer: Customer) => {
-            console.log(customer.id)
             const res: Response = await fetch(`/api/customers/${customer.id}`, {
                 method: "PUT",
                 body: JSON.stringify({

@@ -22,6 +22,7 @@ export async function PUT(
 
   const { id } = await params;
 
+
   const body = await req.json();
 
 
@@ -67,7 +68,7 @@ export async function PUT(
     const json = await res.json();
 
 
-    if(json.error){
+    if (json.error) {
       return NextResponse.json(
         { error: true, message: json.error || 'Error updating customer' },
         { status: res.status }
@@ -91,6 +92,51 @@ export async function PUT(
       { message: 'Hubo un error al actualizar el cliente en el servidor', error: error },
       { status: 500 }
     );
+  }
+
+}
+
+export async function DELETE(  req: Request,
+{ params }: Params) {
+  const cookieStore = await cookies();
+
+  const tokenCookie = cookieStore.get("token");
+
+  const jwtToken = tokenCookie?.value;
+
+  const host = process.env.HOST_PROD;
+
+  const { id } = await params;
+
+  try {
+    const res = await fetch(`${host}/v1/organizations/clients/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${jwtToken}`,
+        'Content-Type': 'application/json'
+      },
+    });
+
+    const json = await res.json();
+
+    console.log(json)
+
+    if (json.error) {
+      return NextResponse.json({
+        error: true,
+        message: json.error || 'No se pudo eliminar el cliente'
+      }, { status: res.status })
+    }
+
+    return NextResponse.json({
+      error: false,
+      message: json.message || "Cliente eliminado correctamente"
+    }, { status: res.status })
+  } catch (e: unknown) {
+    return NextResponse.json({
+      error: true,
+      message:  "Error inesperado: " + e
+    }, { status: 500 })
   }
 
 }
