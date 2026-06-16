@@ -1,7 +1,11 @@
+import Welcome from './components/Welcome'
+import { CustomBreadcrumb } from './components/CustomBreadcrumb';
+
 export default function page() {
   return (
-    <>
-      <h1>Dashboard</h1>
-    </>
+    <div className='flex flex-col gap-4'>
+      <CustomBreadcrumb />
+      <Welcome />
+    </div>
   );
 }
