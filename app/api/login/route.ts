@@ -57,6 +57,6 @@ export async function POST(request: NextRequest) {
     return res;
 
   } catch (error: unknown) {
-    return NextResponse.json({ success: false, message: `Error inesperado: ${error}` }, { status: 500 })
+    return NextResponse.json({ success: false, message: `Error inesperado del servidor: ${error}` }, { status: 500 })
   }
 }
