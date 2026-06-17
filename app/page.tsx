@@ -290,41 +290,92 @@ export default function Home() {
       </section>*/}
 
       {/* FAQ */}
-      <section id="faq" className="container mx-auto max-w-4xl px-6 py-24">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold">
-            Preguntas frecuentes
-          </h2>
+      <section
+        id="faq"
+        className="container mx-auto max-w-7xl px-6 py-24"
+      >
+        <div className="rounded-3xl border bg-muted/30 p-8 md:p-12">
+          <div className="text-center">
+            <span className="inline-flex rounded-full border px-4 py-1 text-sm font-medium">
+              FAQ
+            </span>
+
+            <h2 className="mt-6 text-4xl font-bold tracking-tight md:text-5xl">
+              Preguntas frecuentes
+            </h2>
+
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+              Todo lo que necesitas saber sobre la plataforma de facturación,
+              timbrado y gestión de comprobantes.
+            </p>
+          </div>
+
+          <Accordion
+            type="single"
+            collapsible
+            className="mx-auto mt-12 max-w-3xl space-y-4"
+          >
+            <AccordionItem
+              value="1"
+              className="rounded-2xl border bg-background px-6"
+            >
+              <AccordionTrigger className="text-left text-base font-semibold whitespace-normal leading-relaxed"
+              >
+                ¿Es compatible con CFDI 4.0?
+              </AccordionTrigger>
+
+              <AccordionContent className="text-muted-foreground">
+                Sí. Todos los comprobantes generados cumplen con la normativa CFDI
+                4.0 vigente y sus validaciones correspondientes.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem
+              value="2"
+              className="rounded-2xl border bg-background px-6"
+            >
+              <AccordionTrigger className="text-left text-base font-semibold whitespace-normal leading-relaxed"
+              >
+                ¿Puedo descargar XML y PDF?
+              </AccordionTrigger>
+
+              <AccordionContent className="text-muted-foreground">
+                Sí. Cada factura puede descargarse en formato XML y PDF en cualquier
+                momento desde tu panel.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem
+              value="3"
+              className="rounded-2xl border bg-background px-6"
+            >
+              <AccordionTrigger className="text-left text-base font-semibold whitespace-normal leading-relaxed"
+              >
+                ¿Existe una prueba gratuita?
+              </AccordionTrigger>
+
+              <AccordionContent className="text-muted-foreground">
+                Sí. Puedes crear una cuenta y comenzar a explorar la plataforma sin
+                costo antes de contratar un plan.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem
+              value="4"
+              className="rounded-2xl border bg-background px-6"
+            >
+              <AccordionTrigger className="text-left text-base font-semibold whitespace-normal leading-relaxed"
+              >
+                ¿Cuánto tiempo toma emitir una factura?
+              </AccordionTrigger>
+
+              <AccordionContent className="text-muted-foreground">
+                Menos de un minuto. Completa los datos, genera el comprobante y
+                obtén tu CFDI listo para descargar o enviar.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
-
-        <Accordion type="single" collapsible className="mt-12">
-          <AccordionItem value="1">
-            <AccordionTrigger>
-              ¿Es compatible con CFDI 4.0?
-            </AccordionTrigger>
-            <AccordionContent>
-              Sí, el sistema genera comprobantes compatibles con CFDI 4.0.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="2">
-            <AccordionTrigger>
-              ¿Puedo descargar XML y PDF?
-            </AccordionTrigger>
-            <AccordionContent>
-              Sí, todos los comprobantes pueden descargarse en ambos formatos.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="3">
-            <AccordionTrigger>
-              ¿Existe prueba gratuita?
-            </AccordionTrigger>
-            <AccordionContent>
-              Sí, puedes comenzar sin costo y explorar la plataforma.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
       </section>
 
 
