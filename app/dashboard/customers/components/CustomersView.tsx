@@ -91,7 +91,7 @@ export default function UsersView() {
 
     return (
         <div>
-            {onboarding === 2 ? (
+            {onboarding === 3 ? (
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <div>
