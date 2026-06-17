@@ -20,6 +20,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
   return (
@@ -347,6 +348,7 @@ export default function Home() {
               company: "BBVA",
               experience: "3 años de experiencia",
               avatar: "/team/mike.png",
+              badges: ["Ex-Clip", "Ex-Banxico"],
             },
             {
               name: "Adan Palacios",
@@ -354,6 +356,7 @@ export default function Home() {
               company: "Mercado Libre",
               experience: "7 años de experiencia",
               avatar: "/team/adan.jpg",
+              badges: ["Ex-Clip"],
             },
             {
               name: "Gonzalo Hernández",
@@ -361,6 +364,7 @@ export default function Home() {
               company: "BBVA",
               experience: "4 años de experiencia",
               avatar: "/team/gonzalo.jpg",
+              badges: ["Ex-Totalplay"],
             },
           ].map((member) => (
             <Card key={member.name}>
@@ -389,6 +393,14 @@ export default function Home() {
                 <p className="mt-2 text-sm text-muted-foreground">
                   Actualmente en <strong>{member.company}</strong>
                 </p>
+
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {member.badges.map((badge) => (
+                    <Badge key={badge} variant="secondary">
+                      {badge}
+                    </Badge>
+                  ))}
+                </div>
 
                 <div className="mt-4 rounded-full border px-3 py-1 text-xs">
                   {member.experience}
