@@ -24,8 +24,6 @@ export function useLogin() {
         throw new Error(json.message);
       }
 
-      console.log(json);
-
       return json;
     },
 
