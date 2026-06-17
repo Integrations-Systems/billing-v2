@@ -5,9 +5,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email, password } = body;
 
-    console.log(process.env.HOST_PROD)
-
-    const response = await fetch(`http://78.14.5.157/v1/auth/login`, {
+    const response = await fetch(`${process.env.HOST_PROD}/v1/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -16,17 +14,14 @@ export async function POST(request: NextRequest) {
       }),
     })
 
-     console.log("RES", response)
 
-    //const json = await response.json()
-
-    //console.log("JSON", json)
+    const json = await response.json();
 
     if (!response.ok) {
       return NextResponse.json(
         {
           success: false,
-          message: response,
+          message: json.error,
         },
         {
           status: response.status,
@@ -37,26 +32,26 @@ export async function POST(request: NextRequest) {
     const res = NextResponse.json(
       {
         success: true,
-        message: response,
-        token: response,
-        expires_at: response,
+        message: json.message,
+        token: json.token,
+        expires_at: json.expires_at,
       },
       {
         status: response.status,
       }
     )
 
-    res.cookies.set("token", '', {
+    res.cookies.set("token", json.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      //expires: new Date(json.expires_at),
+      expires: new Date(json.expires_at),
     });
 
     return res;
 
   } catch (error: unknown) {
-    return NextResponse.json({ success: false, message: `Error inesperado del servidor: ${error}` }, { status: 500 })
+    return NextResponse.json({ success: false, message: `Error inesperado del servidor: ${JSON.stringify(error)}` }, { status: 500 })
   }
 }
