@@ -360,7 +360,7 @@ export default function Home() {
               role: "Software Engineer II",
               company: "BBVA",
               experience: "4 años de experiencia",
-              avatar: "/team/carlos.jpg",
+              avatar: "/team/gonzalo.jpg",
             },
           ].map((member) => (
             <Card key={member.name}>
