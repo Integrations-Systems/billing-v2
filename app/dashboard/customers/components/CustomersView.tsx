@@ -209,7 +209,7 @@ export default function UsersView() {
 
                     <CardContent>
                         <Button asChild>
-                            <Link href="/invoices">
+                            <Link href="/dashboard/invoices">
                                 Continuar onboarding
 
                                 <ArrowRight className="ml-2 h-4 w-4" />
