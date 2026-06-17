@@ -12,7 +12,7 @@ export default function InvoicesView(){
 
     return (
         <>
-            {data === 2 ? 
+            {data === 3 ? 
                 <p>Facturas</p> :
                 <OnboardingView />
             }

@@ -12,6 +12,8 @@ export const useGetStatusOnboarding = () => {
             if(data.onboarding_status.current_step === "step_2") return 1;
 
             if(data.onboarding_status.current_step === "step_3") return 2;
+
+            return 3;
         }
     })
 }
