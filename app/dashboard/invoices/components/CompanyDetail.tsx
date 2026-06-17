@@ -46,56 +46,56 @@ export default function CompanyDetail() {
   return (
     <div className="max-w-6xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Header */}
+        {/* Encabezado */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Company Information
+            Información de la empresa
           </h1>
 
           <p className="text-muted-foreground mt-2">
-            Manage your organization details and fiscal information.
+            Administra los datos de tu organización y su información fiscal.
           </p>
         </div>
 
-        {/* General Information */}
+        {/* Información General */}
         <Card className="p-6">
           <div className="mb-6">
             <h2 className="text-lg font-semibold">
-              General Information
+              Información general
             </h2>
 
             <p className="text-sm text-muted-foreground">
-              Basic information about your company.
+              Información básica de tu empresa.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label>Legal Name</Label>
+              <Label>Razón social</Label>
               <Input
-                placeholder="ACME Corporation"
+                placeholder="ACME S.A. de C.V."
                 {...register("legal_name")}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Tax ID</Label>
+              <Label>RFC</Label>
               <Input
-                placeholder="RFC / Tax ID"
+                placeholder="XAXX010101000"
                 {...register("tax_id")}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Email</Label>
+              <Label>Correo electrónico</Label>
               <Input
-                placeholder="contact@company.com"
+                placeholder="contacto@empresa.com"
                 {...register("email")}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Phone</Label>
+              <Label>Teléfono</Label>
               <Input
                 placeholder="+52 55 1234 5678"
                 {...register("phone")}
@@ -103,38 +103,38 @@ export default function CompanyDetail() {
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <Label>Website</Label>
+              <Label>Sitio web</Label>
               <Input
-                placeholder="https://company.com"
+                placeholder="https://empresa.com"
                 {...register("website")}
               />
             </div>
           </div>
         </Card>
 
-        {/* Address */}
+        {/* Domicilio Fiscal */}
         <Card className="p-6">
           <div className="mb-6">
             <h2 className="text-lg font-semibold">
-              Address
+              Domicilio fiscal
             </h2>
 
             <p className="text-sm text-muted-foreground">
-              Physical address of your organization.
+              Dirección registrada de tu organización.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-12">
             <div className="space-y-2 md:col-span-8">
-              <Label>Street</Label>
+              <Label>Calle</Label>
               <Input
-                placeholder="Street"
+                placeholder="Nombre de la calle"
                 {...register("street")}
               />
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <Label>Exterior</Label>
+              <Label>Número exterior</Label>
               <Input
                 placeholder="123"
                 {...register("exterior")}
@@ -142,7 +142,7 @@ export default function CompanyDetail() {
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <Label>Interior</Label>
+              <Label>Número interior</Label>
               <Input
                 placeholder="A"
                 {...register("interior")}
@@ -150,47 +150,47 @@ export default function CompanyDetail() {
             </div>
 
             <div className="space-y-2 md:col-span-4">
-              <Label>Neighborhood</Label>
+              <Label>Colonia</Label>
               <Input
-                placeholder="Neighborhood"
+                placeholder="Colonia"
                 {...register("neighborhood")}
               />
             </div>
 
             <div className="space-y-2 md:col-span-4">
-              <Label>City</Label>
+              <Label>Ciudad</Label>
               <Input
-                placeholder="City"
+                placeholder="Ciudad"
                 {...register("city")}
               />
             </div>
 
             <div className="space-y-2 md:col-span-4">
-              <Label>Municipality</Label>
+              <Label>Municipio o alcaldía</Label>
               <Input
-                placeholder="Municipality"
+                placeholder="Municipio o alcaldía"
                 {...register("municipality")}
               />
             </div>
 
             <div className="space-y-2 md:col-span-4">
-              <Label>State</Label>
+              <Label>Estado</Label>
               <Input
-                placeholder="State"
+                placeholder="Estado"
                 {...register("state")}
               />
             </div>
 
             <div className="space-y-2 md:col-span-4">
-              <Label>Country</Label>
+              <Label>País</Label>
               <Input
-                placeholder="Country"
+                placeholder="México"
                 {...register("country")}
               />
             </div>
 
             <div className="space-y-2 md:col-span-4">
-              <Label>Postal Code</Label>
+              <Label>Código postal</Label>
               <Input
                 placeholder="00000"
                 {...register("postal_code")}
@@ -199,7 +199,7 @@ export default function CompanyDetail() {
           </div>
         </Card>
 
-        {/* Status Messages */}
+        {/* Mensajes de estado */}
         {(isError || isSuccess) && (
           <Card className="p-4">
             {isError && (
@@ -209,21 +209,21 @@ export default function CompanyDetail() {
             )}
 
             {isSuccess && (
-              <p className="text-sm text-green-500">
-                Organization updated successfully.
+              <p className="text-sm text-green-600">
+                La información de la organización se actualizó correctamente.
               </p>
             )}
           </Card>
         )}
 
-        {/* Actions */}
+        {/* Acciones */}
         <div className="flex justify-end border-t pt-6">
           <Button
             type="submit"
             size="lg"
             disabled={isPending}
           >
-            {isPending ? "Saving changes..." : "Save changes"}
+            {isPending ? "Guardando cambios..." : "Guardar cambios"}
           </Button>
         </div>
       </form>
