@@ -6,7 +6,7 @@ import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import LogoutButton from "./LogoutButton";
 
-import decodeJwt from '@/app/utils/decodeJwt'
+import decodeJwt from "@/app/utils/decodeJwt";
 import { Label } from "@/components/ui/label";
 import { Jwt } from "@/app/models/Jwt";
 
@@ -19,44 +19,88 @@ export default async function Header() {
   const isAuthenticated = !!token;
 
   return (
-    <header className="flex flex-col gap-4 py-4 px-4 md:flex-row md:items-center md:justify-between">
-      <Link className="text-lg font-bold" href="/">
-        Billing v2.0.1
-      </Link>
+    <header className="relative overflow-hidden border-b bg-background">
+      {/* Glow izquierdo */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -top-40
+          -left-40
+          h-[500px]
+          w-[500px]
+          rounded-full
+          bg-cyan-500/10
+          blur-[120px]
+        "
+      />
 
-      <div className="flex flex-wrap items-center gap-2 md:flex-nowrap">
-        {isAuthenticated ? (
-          <>
-            <div className="flex gap-2 items-center">
-              <Image
-                src="/avatar.jpg"
-                alt="Avatar"
-                width={36}
-                height={36}
-                className="rounded-full border"
-              />
+      {/* Glow derecho */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -top-40
+          -right-40
+          h-[500px]
+          w-[500px]
+          rounded-full
+          bg-fuchsia-500/15
+          blur-[120px]
+        "
+      />
 
-              <div>
-                <Label>{jwtValue?.first_name} {jwtValue?.last_name}</Label>
-                <Label>{jwtValue?.email}</Label>
+      {/* Líneas decorativas */}
+      <div className="absolute top-0 left-0 h-px w-1/3 bg-gradient-to-r from-cyan-500/80 to-transparent" />
+      <div className="absolute top-0 right-0 h-px w-1/3 bg-gradient-to-l from-fuchsia-500/80 to-transparent" />
+
+      <div className="relative flex flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between">
+        <Link
+          href="/"
+          className="text-lg font-bold tracking-tight transition-opacity hover:opacity-80"
+        >
+          Billing v2.0.1
+        </Link>
+
+        <div className="flex flex-wrap items-center gap-3 md:flex-nowrap">
+          {isAuthenticated ? (
+            <>
+              <div className="flex items-center gap-3 rounded-xl border bg-background/80 px-3 py-2 backdrop-blur-sm">
+                <Image
+                  src="/avatar.jpg"
+                  alt="Avatar"
+                  width={40}
+                  height={40}
+                  className="rounded-full border"
+                />
+
+                <div className="flex flex-col">
+                  <Label className="font-medium">
+                    {jwtValue?.first_name} {jwtValue?.last_name}
+                  </Label>
+
+                  <Label className="text-xs text-muted-foreground">
+                    {jwtValue?.email}
+                  </Label>
+                </div>
               </div>
-            </div>
 
-            <LogoutButton />
-          </>
-        ) : (
-          <>
-            <Button asChild size="sm">
-              <Link href="/login">Iniciar sesión</Link>
-            </Button>
+              <LogoutButton />
+            </>
+          ) : (
+            <>
+              <Button asChild size="sm">
+                <Link href="/login">Iniciar sesión</Link>
+              </Button>
 
-            <Button asChild variant="outline" size="sm">
-              <Link href="/sign-up">Registrarse</Link>
-            </Button>
-          </>
-        )}
+              <Button asChild variant="outline" size="sm">
+                <Link href="/sign-up">Registrarse</Link>
+              </Button>
+            </>
+          )}
 
-        <ThemeToggle />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
