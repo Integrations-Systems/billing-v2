@@ -1,20 +1,21 @@
-'use client';
+"use client";
 
-import { certificatesSchema } from '../schema/certificates.schema';
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { useCreateSatFiles } from '../hooks/mutations/useCreateSatFiles';
-import { Spinner } from '@/components/ui/spinner';
-import { Input } from '@/components/ui/input';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-type FormData = z.infer<typeof certificatesSchema>
+import { certificatesSchema } from "../schema/certificates.schema";
+import { useCreateSatFiles } from "../hooks/mutations/useCreateSatFiles";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+
+type FormData = z.infer<typeof certificatesSchema>;
 
 export function CompanyCertificates() {
-
-    const { mutate, isError, error, isPending, data } = useCreateSatFiles();
-
+    const { mutate, isError, error, isPending, isSuccess } = useCreateSatFiles();
 
     const {
         register,
@@ -22,38 +23,110 @@ export function CompanyCertificates() {
         formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(certificatesSchema),
-    })
+    });
 
-    const onSubmit = async (dataFile) => {
-        mutate(dataFile)
+    const onSubmit = (data: FormData) => {
+        mutate(data);
     };
 
     return (
-        <form
-            className='flex flex-col w-fit gap-4'
-            onSubmit={handleSubmit(onSubmit)}
-        >
-            {isError && <p className='text-red-500'>{error.message}
-            </p>}
-            <Input type="file" accept=".cer" {...register("cerFile")} />
-            {errors.cerFile?.message && <p className="text-red-500 text-sm">{errors.cerFile.message as string}</p>}
-            <Input type="file" accept=".key" {...register("keyFile")} />
-            {errors.keyFile?.message && <p className="text-red-500 text-sm">{errors.keyFile.message as string}</p>}
-            <Input type="password" placeholder='Contraseña' {...register("password")} />
-            {errors.password?.message && <p className="text-red-500 text-sm">{errors.password.message as string}</p>}
-            {isPending ?
-                <Button
-                    disabled
+        <Card className="max-w-2xl">
+            <CardHeader>
+                <CardTitle>Certificados SAT</CardTitle>
+                <CardDescription>
+                    Sube tu certificado (.cer), llave privada (.key) y la contraseña
+                    correspondiente para habilitar la facturación electrónica.
+                </CardDescription>
+            </CardHeader>
+
+            <CardContent>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-6"
                 >
-                    <Spinner data-icon="inline-start" />
-                    Cargando...
-                </Button>
-                :
-                <Button
-                    type="submit"
-                >
-                    Guardar
-                </Button>}
-        </form>
-    )
+                    {isError && (
+                        <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3">
+                            <p className="text-sm text-destructive">
+                                {error.message}
+                            </p>
+                        </div>
+                    )}
+
+                    {isSuccess && (
+                        <div className="rounded-md border border-green-500/20 bg-green-500/10 p-3">
+                            <p className="text-sm text-green-600 dark:text-green-400">
+                                Certificados cargados correctamente.
+                            </p>
+                        </div>
+                    )}
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                            Archivo .CER
+                        </label>
+
+                        <Input
+                            type="file"
+                            accept=".cer"
+                            disabled={isPending}
+                            {...register("cerFile")}
+                        />
+
+                        {errors.cerFile && (
+                            <p className="text-sm text-destructive">
+                                {errors.cerFile.message as string}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                            Archivo .KEY
+                        </label>
+
+                        <Input
+                            type="file"
+                            accept=".key"
+                            disabled={isPending}
+                            {...register("keyFile")}
+                        />
+
+                        {errors.keyFile && (
+                            <p className="text-sm text-destructive">
+                                {errors.keyFile.message as string}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                            Contraseña de la llave privada
+                        </label>
+
+                        <Input
+                            type="password"
+                            placeholder="********"
+                            disabled={isPending}
+                            {...register("password")}
+                        />
+
+                        {errors.password && (
+                            <p className="text-sm text-destructive">
+                                {errors.password.message as string}
+                            </p>
+                        )}
+                    </div>
+
+                    <Button
+                        type="submit"
+                        disabled={isPending}
+                        className="w-full"
+                    >
+                        {isPending && <Spinner data-icon="inline-start" />}
+                        {isPending ? "Validando certificados..." : "Guardar certificados"}
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
+    );
 }

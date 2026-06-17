@@ -8,7 +8,11 @@ export default function OnboardingView() {
     const queryClient = useQueryClient();
     const step = queryClient.getQueryData(['check-onboarding']);
 
-    if(step === 0) return <CompanyInfo />
-    if(step === 1) return <CompanyDetail />
-    if(step === 2) return <CompanyCertificates />
+    if (step === 0) return <CompanyInfo />
+    if (step === 1) return <CompanyDetail />
+    if (step === 2) return (
+        <div className="flex justify-center p-6">
+            <CompanyCertificates />
+        </div>
+    )
 }

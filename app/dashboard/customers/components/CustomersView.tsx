@@ -75,16 +75,6 @@ export default function UsersView() {
         setOpenDelete(true);
     };
 
-    const confirmDelete = () => {
-        if (!customerToDelete) return;
-
-        deleteCustomer.mutate(customerToDelete.id, {
-            onSuccess: () => {
-                setOpenDelete(false);
-                setCustomerToDelete(null);
-            },
-        });
-    };
     if (onboardingIsLoading || customersIsLoading) {
         return <div>Cargando...</div>;
     }
@@ -146,6 +136,8 @@ export default function UsersView() {
                     <AlertDialog
                         open={openDelete}
                         onOpenChange={(open) => {
+                            if (deleteCustomer.isPending) return;
+
                             setOpenDelete(open);
 
                             if (!open) {
@@ -167,15 +159,29 @@ export default function UsersView() {
                             </AlertDialogHeader>
 
                             <AlertDialogFooter>
-                                <AlertDialogCancel>
+                                <AlertDialogCancel
+                                    disabled={deleteCustomer.isPending}
+                                >
                                     Cancelar
                                 </AlertDialogCancel>
 
                                 <AlertDialogAction
-                                    onClick={confirmDelete}
-                                    disabled={
-                                        deleteCustomer.isPending
-                                    }
+                                    disabled={deleteCustomer.isPending}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+
+                                        if (!customerToDelete) return;
+
+                                        deleteCustomer.mutate(customerToDelete.id, {
+                                            onSuccess: () => {
+                                                setOpenDelete(false);
+                                                setCustomerToDelete(null);
+                                            },
+                                            onError: (error) => {
+                                                console.error(error);
+                                            },
+                                        });
+                                    }}
                                 >
                                     {deleteCustomer.isPending
                                         ? "Eliminando..."
