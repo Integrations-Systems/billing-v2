@@ -47,7 +47,7 @@ import { customerSchema } from "../schema/customerFormSchema";
 import { useCreateCustomer } from "../hooks/mutations/useCreateCustomer";
 import { useUpdateCustomer } from "../hooks/mutations/useUpdateCustomer";
 import { Spinner } from "@/components/ui/spinner";
-
+import { REGIMENES_FISCALES } from "@/app/constants/regimenes-fiscales";
 
 
 type CustomerFormData = z.infer<typeof customerSchema>;
@@ -271,17 +271,16 @@ export default function CustomerFormDialog({
                                                 </FormControl>
 
                                                 <SelectContent>
-                                                    <SelectItem value="601">
-                                                        601 - General de Ley Personas Morales
-                                                    </SelectItem>
-
-                                                    <SelectItem value="626">
-                                                        626 - RESICO
-                                                    </SelectItem>
-
-                                                    <SelectItem value="612">
-                                                        612 - Personas Físicas con Actividades Empresariales
-                                                    </SelectItem>
+                                                    {[...REGIMENES_FISCALES]
+                                                        .sort((a, b) => Number(a.value) - Number(b.value))
+                                                        .map((element) => (
+                                                            <SelectItem
+                                                                key={element.value}
+                                                                value={element.value}
+                                                            >
+                                                                {element.name}
+                                                            </SelectItem>
+                                                        ))}
                                                 </SelectContent>
                                             </Select>
 
@@ -503,7 +502,7 @@ export default function CustomerFormDialog({
 
                                 <FormField
                                     control={form.control}
-
+                                    disabled
                                     name="address.country"
                                     render={({ field }) => (
                                         <FormItem>

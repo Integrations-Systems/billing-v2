@@ -23,22 +23,22 @@ import { Separator } from "@/components/ui/separator";
 
 const links = [
     {
-        title: "Dashboard",
+        title: "Home",
         href: "/dashboard",
         icon: Home,
     },
     {
-        title: "Customers",
+        title: "Clientes",
         href: "/dashboard/customers",
         icon: Users,
     },
     {
-        title: "Invoices",
+        title: "Facturas",
         href: "/dashboard/invoices",
         icon: FileText,
     },
     {
-        title: "Settings",
+        title: "Configuración",
         href: "/dashboard/settings",
         icon: Settings,
     },

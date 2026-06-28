@@ -104,6 +104,7 @@ export default function FormSignUp() {
 
                                 <FormControl>
                                     <Input
+                                        type="number"
                                         placeholder="5533889922"
                                         {...field}
                                     />
