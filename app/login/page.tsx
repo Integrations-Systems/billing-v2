@@ -1,6 +1,6 @@
 import FormLogin from "./components/FormLogin";
 
-export default function Login() {
+export default async function Login() {
   return (
     <>
       <FormLogin />
