@@ -187,13 +187,17 @@ export default function CheckoutPage() {
               <label className="text-sm font-medium text-muted-foreground">¿Cuántos timbres necesitas?</label>
               <div className="flex gap-3 items-center">
                 <Input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   placeholder="Ej. 250"
                   value={customStamps}
-                  onChange={(e) => setCustomStamps(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    setCustomStamps(value);
+                  }}
                   className="h-11 text-base"
                   disabled={loading}
-                  min={2}
                 />
                 <div className="text-right min-w-[90px]">
                   <div className="text-xs text-muted-foreground">Total:</div>

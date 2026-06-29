@@ -17,8 +17,10 @@ export default function CheckoutForm() {
   const elements = useElements();
 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   async function handleSubmit(e: FormEvent) {
+    setErrorMessage(undefined)
     e.preventDefault();
 
     if (!stripe || !elements) return;
@@ -33,7 +35,7 @@ export default function CheckoutForm() {
     });
 
     if (error) {
-      console.error(error.message);
+      setErrorMessage(error.message)
     }
 
     setLoading(false);
@@ -52,6 +54,7 @@ export default function CheckoutForm() {
       >
         {loading ? "Procesando compra..." : "Pagar"}
       </Button>
+      <p className="py-4 text-red-500">{errorMessage ? errorMessage : null}</p>
     </form>
   );
 }
