@@ -67,8 +67,15 @@ export default async function Header() {
           {isAuthenticated ? (
             <>
               <div className="flex items-center gap-3 rounded-xl border px-3 py-2">
+                <Image
+                  src="/coin.png"
+                  alt="Billpoint"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
                 <Badge variant="secondary">
-                  {jwtValue?.tokens ?? 0} timbres
+                  {jwtValue?.tokens ?? 0} Billpoints
                 </Badge>
 
                 <Button asChild size="sm">

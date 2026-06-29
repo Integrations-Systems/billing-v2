@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
 
 // Definimos el costo por timbre individual
-const PRICE_PER_STAMP = 1.50;
+const PRICE_PER_STAMP = 5;
 
 // Configuramos los paquetes preestablecidos de timbres
 const PRESET_PACKAGES = [
@@ -41,21 +41,25 @@ export default function CheckoutPage() {
   };
 
   const createPaymentIntent = async (totalStamps: number) => {
+    if (totalStamps < 2) {
+      return;
+    }
+
     const finalAmount = totalStamps * PRICE_PER_STAMP;
-    if (finalAmount <= 0) return;
 
     setLoading(true);
+
     try {
       const res = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        // Enviamos el monto total (en pesos o centavos según requiera tu backend de Stripe)
-        // e idealmente también la cantidad de timbres como metadata
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           amount: finalAmount,
-          metadata: { stamps: totalStamps }
+          metadata: {
+            stamps: totalStamps,
+          },
         }),
       });
 
@@ -76,7 +80,12 @@ export default function CheckoutPage() {
 
   const handleCustomSubmit = () => {
     const stamps = Number(customStamps);
-    if (!stamps || stamps <= 0) return;
+
+    if (!stamps || stamps < 2) {
+      alert("La compra mínima es de 2 timbres ($10 MXN)");
+      return;
+    }
+
     createPaymentIntent(stamps);
   };
 
@@ -92,10 +101,10 @@ export default function CheckoutPage() {
     return (
       <Card className="w-full shadow-md">
         <CardHeader>
-          <Button 
-            variant="ghost" 
-            size="lg" 
-            onClick={reset} 
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={reset}
             className="w-fit"
           >
             <ArrowLeft className="h-4 w-4" /> Cambiar paquete
@@ -112,7 +121,7 @@ export default function CheckoutPage() {
           <StripeProvider clientSecret={clientSecret}>
             <CheckoutForm />
           </StripeProvider>
-          
+
         </CardContent>
       </Card>
     );
@@ -127,24 +136,23 @@ export default function CheckoutPage() {
           Cada timbre fiscal tiene un costo fijo de ${PRICE_PER_STAMP} MXN.
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="space-y-6">
         {/* Lista de Paquetes Preestablecidos */}
         <div className="grid gap-3">
           {PRESET_PACKAGES.map((pkg) => {
             const isSelected = selectedStamps === pkg.stamps;
             const totalPrice = pkg.stamps * PRICE_PER_STAMP;
-            
+
             return (
               <button
                 key={pkg.stamps}
                 disabled={loading}
                 onClick={() => handleSelectPackage(pkg.stamps)}
-                className={`w-full flex items-center justify-between p-4 rounded-xl border text-left transition-all ${
-                  isSelected 
-                    ? "border-primary bg-primary/5 ring-1 ring-primary" 
-                    : "border-input bg-background hover:bg-accent hover:text-accent-foreground"
-                }`}
+                className={`w-full flex items-center justify-between p-4 rounded-xl border text-left transition-all ${isSelected
+                  ? "border-primary bg-primary/5 ring-1 ring-primary"
+                  : "border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                  }`}
               >
                 <div className="space-y-0.5">
                   <div className="text-xs font-medium text-muted-foreground">{pkg.label}</div>
@@ -185,19 +193,24 @@ export default function CheckoutPage() {
                   onChange={(e) => setCustomStamps(e.target.value)}
                   className="h-11 text-base"
                   disabled={loading}
-                  min="1"
+                  min={2}
                 />
                 <div className="text-right min-w-[90px]">
                   <div className="text-xs text-muted-foreground">Total:</div>
                   <div className="text-lg font-bold">${getFinalAmount()}</div>
                 </div>
               </div>
+              {Number(customStamps) > 0 && Number(customStamps) < 2 && (
+                <p className="text-sm text-destructive">
+                  La compra mínima es de 2 timbres ($10 MXN).
+                </p>
+              )}
             </div>
 
-            <Button 
-              className="w-full h-11 text-base font-medium" 
-              onClick={handleCustomSubmit} 
-              disabled={loading || !customStamps || Number(customStamps) <= 0}
+            <Button
+              className="w-full h-11 text-base font-medium"
+              onClick={handleCustomSubmit}
+              disabled={loading || Number(customStamps) < 2}
             >
               {loading ? (
                 <>
@@ -210,7 +223,7 @@ export default function CheckoutPage() {
             </Button>
           </div>
         )}
-        
+
         {/* Loader global */}
         {loading && selectedStamps !== "custom" && (
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground pt-1 animate-pulse">
