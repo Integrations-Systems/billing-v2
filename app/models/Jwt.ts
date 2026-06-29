@@ -8,4 +8,5 @@ export interface Jwt {
     organization_slug: string;
     role:              string;
     exp:               number;
+    tokens:            number;
 }

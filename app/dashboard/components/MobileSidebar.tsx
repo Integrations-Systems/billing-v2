@@ -19,22 +19,22 @@ import {
 
 const links = [
   {
-    title: "Dashboard",
+    title: "Home",
     href: "/dashboard",
     icon: Home,
   },
   {
-    title: "Invoices",
-    href: "/dashboard/invoices",
-    icon: FileText,
-  },
-  {
-    title: "Customers",
+    title: "Clientes",
     href: "/dashboard/customers",
     icon: Users,
   },
   {
-    title: "Settings",
+    title: "Facturas",
+    href: "/dashboard/invoices",
+    icon: FileText,
+  },
+  {
+    title: "Configuración",
     href: "/dashboard/settings",
     icon: Settings,
   },
