@@ -60,7 +60,7 @@ export default function CompanyInfo() {
   };
 
   return (
-    <Card className="max-w-xl">
+    <Card className="max-w-xl mt-4">
       <CardHeader>
         <CardTitle>Información de la compañía</CardTitle>
         <CardDescription>
