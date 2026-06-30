@@ -1,18 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+
 import StripeProvider from "./StripeProvider";
 import CheckoutForm from "./CheckoutForm";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
-// Definimos el costo por timbre individual
+import {
+  ArrowLeft,
+  CheckCircle2,
+  CreditCard,
+  Loader2,
+  ShieldCheck,
+  Star,
+  Zap,
+} from "lucide-react";
+
 const PRICE_PER_STAMP = 1.5;
-
-// Configuramos los paquetes preestablecidos de timbres
-import Image from "next/image";
 
 const PRESET_PACKAGES = [
   {
@@ -22,8 +39,9 @@ const PRESET_PACKAGES = [
   },
   {
     stamps: 500,
-    label: "Paquete Negocio",
+    label: "Más vendido",
     image: "/coins/500-coins.png",
+    featured: true,
   },
   {
     stamps: 1000,
@@ -35,22 +53,28 @@ const PRESET_PACKAGES = [
 type Step = "select" | "checkout";
 
 export default function CheckoutPage() {
-  const [selectedStamps, setSelectedStamps] = useState<number | "custom" | null>(null);
+  const [selectedStamps, setSelectedStamps] = useState<
+    number | "custom" | null
+  >(null);
+
   const [customStamps, setCustomStamps] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<Step>("select");
 
-  // Calculamos el monto final según la selección
   const getFinalAmount = (): number => {
     if (selectedStamps === "custom") {
       return (Number(customStamps) || 0) * PRICE_PER_STAMP;
     }
+
     return (selectedStamps || 0) * PRICE_PER_STAMP;
   };
 
   const getStampsCount = (): number => {
-    if (selectedStamps === "custom") return Number(customStamps) || 0;
+    if (selectedStamps === "custom") {
+      return Number(customStamps) || 0;
+    }
+
     return selectedStamps || 0;
   };
 
@@ -78,6 +102,7 @@ export default function CheckoutPage() {
       });
 
       const data = await res.json();
+
       setClientSecret(data.clientSecret);
       setStep("checkout");
     } catch (err) {
@@ -96,7 +121,7 @@ export default function CheckoutPage() {
     const stamps = Number(customStamps);
 
     if (!stamps || stamps < 2) {
-      alert("La compra mínima es de 2 timbres ($10 MXN)");
+      alert("La compra mínima es de 2 timbres.");
       return;
     }
 
@@ -110,189 +135,322 @@ export default function CheckoutPage() {
     setStep("select");
   };
 
-  // 🧾 STEP 2: Checkout Stripe
   if (step === "checkout" && clientSecret) {
     return (
-      <Card className="w-full shadow-md">
-        <CardHeader>
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={reset}
-            className="w-fit"
-          >
-            <ArrowLeft className="h-4 w-4" /> Cambiar paquete
-          </Button>
-          <CardTitle className="text-xl font-bold">Completa tu compra</CardTitle>
-          <CardDescription>
-            Estás adquiriendo <span className="font-semibold text-foreground">{getStampsCount()} timbres</span> por un total de:
-          </CardDescription>
-          <div className="text-2xl font-bold text-primary pt-1">
-            ${getFinalAmount()} MXN
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <StripeProvider clientSecret={clientSecret}>
-            <CheckoutForm />
-          </StripeProvider>
+      <div className="max-w-3xl mx-auto">
+        <Card className="shadow-lg">
+          <CardHeader className="space-y-4">
+            <Button
+              variant="ghost"
+              onClick={reset}
+              className="w-fit"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Cambiar paquete
+            </Button>
 
-        </CardContent>
-      </Card>
+            <div>
+              <CardTitle className="text-3xl">
+                Completa tu compra
+              </CardTitle>
+
+              <CardDescription>
+                Finaliza el pago de tus timbres fiscales.
+              </CardDescription>
+            </div>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <Card className="bg-muted/30">
+              <CardContent className="pt-6">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">
+                    Timbres
+                  </span>
+
+                  <span className="font-medium">
+                    {getStampsCount()}
+                  </span>
+                </div>
+
+                <div className="flex justify-between mt-3">
+                  <span className="text-muted-foreground">
+                    Precio unitario
+                  </span>
+
+                  <span>${PRICE_PER_STAMP} MXN</span>
+                </div>
+
+                <Separator className="my-4" />
+
+                <div className="flex justify-between text-xl font-bold">
+                  <span>Total</span>
+                  <span>${getFinalAmount()} MXN</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <StripeProvider clientSecret={clientSecret}>
+              <CheckoutForm />
+            </StripeProvider>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
-  // 🧾 STEP 1: Select amount of stamps
   return (
-    <Card className="w-full max-w-6xl mx-auto shadow-md">
-      <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center">
-          Adquirir Timbres
-        </CardTitle>
-        <CardDescription className="text-center">
-          Cada timbre fiscal tiene un costo fijo de ${PRICE_PER_STAMP} MXN.
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="space-y-8">
-        {/* Paquetes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {PRESET_PACKAGES.map((pkg) => {
-            const isSelected = selectedStamps === pkg.stamps;
-            const totalPrice = pkg.stamps * PRICE_PER_STAMP;
-
-            return (
-              <button
-                key={pkg.stamps}
-                disabled={loading}
-                onClick={() => handleSelectPackage(pkg.stamps)}
-                className={`group relative overflow-hidden rounded-2xl border transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${isSelected
-                  ? "border-primary ring-2 ring-primary bg-primary/5"
-                  : "border-border bg-card hover:border-primary/50"
-                  }`}
-              >
-                {/* Badge */}
-                {isSelected && (
-                  <div className="absolute top-3 right-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary" />
-                  </div>
-                )}
-
-                {/* Imagen */}
-                {/* Imagen */}
-                <div className="relative h-36 border-b bg-muted/30 flex items-center justify-center">
-                  <Image
-                    src={pkg.image}
-                    alt={`${pkg.stamps} timbres`}
-                    fill
-                    className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-
-                {/* Contenido */}
-                <div className="p-5 space-y-3">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                    {pkg.label}
-                  </div>
-
-                  <h3 className="text-3xl font-bold">
-                    {pkg.stamps}
-                  </h3>
-
-                  <p className="text-sm text-muted-foreground">
-                    Timbres fiscales
-                  </p>
-
-                  <div className="pt-3 border-t">
-                    <div className="text-3xl font-extrabold">
-                      ${totalPrice}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      ${PRICE_PER_STAMP} por timbre
-                    </div>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-
-          {/* Card personalizada */}
-          <button
-            onClick={() => setSelectedStamps("custom")}
-            disabled={loading}
-            className={`rounded-2xl border-2 border-dashed transition-all hover:border-primary hover:bg-primary/5 overflow-hidden ${selectedStamps === "custom"
-              ? "border-primary bg-primary/5"
-              : ""
-              }`}
-          >
-            <div className="h-36 border-b bg-muted/30 flex items-center justify-center">
-              <Image
-                src="/coins/custom.png"
-                alt="Cantidad personalizada"
-                width={120}
-                height={120}
-                className="object-contain"
-              />
+    <div className="max-w-7xl mx-auto">
+      <Card className="shadow-lg border-0">
+        <CardHeader className="pb-10">
+          <div className="text-center">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+              <CreditCard className="h-8 w-8 text-primary" />
             </div>
 
-            <div className="min-h-[184px] flex flex-col items-center justify-center gap-4 p-6">
-              <h3 className="text-xl font-bold">
-                Cantidad personalizada
-              </h3>
+            <CardTitle className="text-4xl md:text-5xl font-bold">
+              Adquirir Timbres Fiscales
+            </CardTitle>
 
-              <p className="text-sm text-muted-foreground text-center">
-                Elige exactamente los timbres que necesitas.
-              </p>
-            </div>
-          </button>
-        </div>
+            <CardDescription className="max-w-2xl mx-auto mt-4 text-base">
+              Compra únicamente los timbres que necesitas.
+              Sin contratos, sin permanencia y con activación
+              inmediata.
+            </CardDescription>
 
-        {/* Formulario custom */}
-        {selectedStamps === "custom" && (
-          <div className="max-w-lg mx-auto rounded-2xl border p-6 space-y-4 animate-in fade-in">
-            <label className="text-sm font-medium">
-              ¿Cuántos timbres necesitas?
-            </label>
+            <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4" />
+                Pago seguro
+              </div>
 
-            <div className="flex gap-3">
-              <Input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                placeholder="Ej. 250"
-                value={customStamps}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, "");
-                  setCustomStamps(value);
-                }}
-              />
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                Activación inmediata
+              </div>
 
-              <div className="min-w-[100px] text-right">
-                <div className="text-xs text-muted-foreground">
-                  Total
-                </div>
-                <div className="font-bold text-xl">
-                  ${getFinalAmount()}
-                </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4" />
+                Sin expiración
               </div>
             </div>
-
-            {Number(customStamps) > 0 &&
-              Number(customStamps) < 2 && (
-                <p className="text-sm text-destructive">
-                  La compra mínima es de 2 timbres ($10 MXN).
-                </p>
-              )}
-
-            <Button
-              className="w-full"
-              onClick={handleCustomSubmit}
-              disabled={loading || Number(customStamps) < 2}
-            >
-              Comprar {customStamps || 0} timbres
-            </Button>
           </div>
-        )}
-      </CardContent>
-    </Card>
+        </CardHeader>
+
+        <CardContent className="space-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {PRESET_PACKAGES.map((pkg) => {
+              const totalPrice = pkg.stamps * PRICE_PER_STAMP;
+              const isSelected =
+                selectedStamps === pkg.stamps;
+
+              return (
+                <Card
+                  key={pkg.stamps}
+                  className={`relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                    pkg.featured
+                      ? "border-primary shadow-lg"
+                      : ""
+                  } ${
+                    isSelected
+                      ? "ring-2 ring-primary"
+                      : ""
+                  }`}
+                >
+                  {pkg.featured && (
+                    <Badge className="absolute top-4 right-4">
+                      <Star className="h-3 w-3 mr-1" />
+                      Más vendido
+                    </Badge>
+                  )}
+
+                  <div className="relative h-44 border-b bg-muted/20">
+                    <Image
+                      src={pkg.image}
+                      alt={`${pkg.stamps} timbres`}
+                      fill
+                      className="object-contain p-6"
+                    />
+                  </div>
+
+                  <CardContent className="p-6">
+                    <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {pkg.label}
+                    </div>
+
+                    <h3 className="text-4xl font-black mt-2">
+                      {pkg.stamps}
+                    </h3>
+
+                    <p className="text-muted-foreground text-sm">
+                      Timbres fiscales
+                    </p>
+
+                    <div className="mt-6">
+                      <div className="text-4xl font-black">
+                        ${totalPrice}
+                      </div>
+
+                      <div className="text-sm text-muted-foreground">
+                        MXN
+                      </div>
+                    </div>
+
+                    <Separator className="my-5" />
+
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        Activación inmediata
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        Uso permanente
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        Pago seguro
+                      </div>
+                    </div>
+
+                    <Button
+                      className="w-full mt-6"
+                      disabled={loading}
+                      onClick={() =>
+                        handleSelectPackage(pkg.stamps)
+                      }
+                    >
+                      {loading &&
+                      selectedStamps === pkg.stamps ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Comprar ahora"
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+
+            <Card
+              className={`border-2 border-dashed transition-all hover:border-primary hover:shadow-lg ${
+                selectedStamps === "custom"
+                  ? "border-primary"
+                  : ""
+              }`}
+            >
+              <div className="relative h-44 border-b bg-muted/20">
+                <Image
+                  src="/coins/custom.png"
+                  alt="Personalizado"
+                  fill
+                  className="object-contain p-6"
+                />
+              </div>
+
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold">
+                  Personalizado
+                </h3>
+
+                <p className="text-muted-foreground mt-2">
+                  Compra exactamente la cantidad de timbres
+                  que necesitas.
+                </p>
+
+                <Button
+                  variant="outline"
+                  className="w-full mt-6"
+                  onClick={() =>
+                    setSelectedStamps("custom")
+                  }
+                >
+                  Personalizar
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {selectedStamps === "custom" && (
+            <Card className="max-w-xl mx-auto shadow-md">
+              <CardHeader>
+                <CardTitle>
+                  Cantidad personalizada
+                </CardTitle>
+
+                <CardDescription>
+                  Ingresa la cantidad de timbres que deseas
+                  adquirir.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-6">
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Ej. 250"
+                  value={customStamps}
+                  onChange={(e) => {
+                    const value =
+                      e.target.value.replace(/\D/g, "");
+                    setCustomStamps(value);
+                  }}
+                />
+
+                <Card className="bg-muted/30">
+                  <CardContent className="pt-6">
+                    <div className="flex justify-between">
+                      <span>Timbres</span>
+                      <span>{customStamps || 0}</span>
+                    </div>
+
+                    <div className="flex justify-between mt-2">
+                      <span>Precio unitario</span>
+                      <span>${PRICE_PER_STAMP}</span>
+                    </div>
+
+                    <Separator className="my-4" />
+
+                    <div className="flex justify-between font-bold text-xl">
+                      <span>Total</span>
+                      <span>
+                        ${getFinalAmount()} MXN
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {Number(customStamps) > 0 &&
+                  Number(customStamps) < 2 && (
+                    <p className="text-sm text-destructive">
+                      La compra mínima es de 2 timbres.
+                    </p>
+                  )}
+
+                <Button
+                  className="w-full"
+                  disabled={
+                    loading || Number(customStamps) < 2
+                  }
+                  onClick={handleCustomSubmit}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      Procesando...
+                    </>
+                  ) : (
+                    `Comprar ${customStamps || 0} timbres`
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }
