@@ -30,7 +30,7 @@ export const customerSchema = z.object({
     city: z.string().min(1, "Ciudad requerida"),
     municipality: z.string().min(1, "Municipio requerido"),
     state: z.string().min(1, "Estado requerido"),
-    country: z.string().min(1, "País requerido"),
+    country: z.string().min(1, "País requerido").optional(),
     postal_code: z
       .string()
       .length(5, "Código postal inválido"),

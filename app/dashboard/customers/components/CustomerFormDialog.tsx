@@ -151,6 +151,11 @@ export default function CustomerFormDialog({
         const payload: Customer = {
             ...user,
             ...values,
+            address: {
+                ...user.address,
+                ...values.address,
+                country: values.address.country ?? user.address.country,
+            },
         };
 
         updateCustomer.mutate(payload, {
@@ -502,7 +507,6 @@ export default function CustomerFormDialog({
 
                                 <FormField
                                     control={form.control}
-                                    disabled
                                     name="address.country"
                                     render={({ field }) => (
                                         <FormItem>
@@ -512,7 +516,9 @@ export default function CustomerFormDialog({
 
                                             <FormControl>
                                                 <Input
+                                                    disabled
                                                     {...field}
+                                                    value="MEX"
                                                 />
                                             </FormControl>
 

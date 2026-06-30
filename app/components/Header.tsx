@@ -67,6 +67,18 @@ export default async function Header() {
           {isAuthenticated ? (
             <>
               <div className="flex items-center gap-3 rounded-xl border px-3 py-2">
+                <Badge variant="secondary">
+                  {jwtValue?.subscription_plan ?? 'Basic'}
+                </Badge>
+
+                <Button asChild size="sm">
+                  <Link href="/dashboard/pricing">
+                    Ver planes
+                  </Link>
+                </Button>
+              </div>
+              
+              <div className="flex items-center gap-3 rounded-xl border px-3 py-2">
                 <Image
                   src="/coin.png"
                   alt="Billpoint"
