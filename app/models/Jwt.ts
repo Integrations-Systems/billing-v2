@@ -9,4 +9,5 @@ export interface Jwt {
     role:              string;
     exp:               number;
     tokens:            number;
+    subscription_plan: string;
 }
