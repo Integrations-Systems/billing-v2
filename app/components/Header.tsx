@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import LogoutButton from "./LogoutButton";
+import { Badge } from "@/components/ui/badge";
 
 import decodeJwt from "@/app/utils/decodeJwt";
 import { Label } from "@/components/ui/label";
@@ -65,6 +66,25 @@ export default async function Header() {
         <div className="flex flex-wrap items-center gap-3 md:flex-nowrap">
           {isAuthenticated ? (
             <>
+              <div className="flex items-center gap-3 rounded-xl border px-3 py-2">
+                <Image
+                  src="/coin.png"
+                  alt="Billpoint"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+                <Badge variant="secondary">
+                  {jwtValue?.tokens ?? 0} Billpoints
+                </Badge>
+
+                <Button asChild size="sm">
+                  <Link href="/dashboard/checkout">
+                    Comprar más
+                  </Link>
+                </Button>
+              </div>
+
               <div className="flex items-center gap-3 rounded-xl border bg-background/80 px-3 py-2 backdrop-blur-sm">
                 <Image
                   src="/avatar.jpg"

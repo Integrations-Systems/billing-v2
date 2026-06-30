@@ -3,52 +3,55 @@ import { cookies } from 'next/headers';
 
 export async function GET() {
 
-    const cookieStore = await cookies();
+  const cookieStore = await cookies();
 
-    const tokenCookie = cookieStore.get("token");
+  const tokenCookie = cookieStore.get("token");
 
-    const jwtToken = tokenCookie?.value;
+  const jwtToken = tokenCookie?.value;
 
-    const host = process.env.HOST_PROD;
+  const host = process.env.HOST_PROD;
 
-    try {
-        const res = await fetch(`${host}/v1/organizations/clients`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${jwtToken}`,
-                'Content-Type': 'application/json'
-            }
-        });
+  try {
+    const res = await fetch(`${host}/v1/organizations/clients`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${jwtToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
 
-        const json = await res.json();
+    const json = await res.json();
 
-        if (json.status === 401) {
-            return NextResponse.json({
-                error: true,
-                message: 'No autorizado, verifica tu clave de API',
-            }, { status: json.status });
-        }
+    if (json.status === 401) {
+      return NextResponse.json({
+        error: true,
+        message: 'No autorizado, verifica tu clave de API',
+      }, { status: json.status });
+    }
 
-        if (json.status === 402) {
-            return NextResponse.json({
-                error: true,
-                message: json.message || 'Payment Required',
-                customers: []
-            }, { status: json.status });
-        }
+    if (json.status === 402) {
+      return NextResponse.json({
+        error: true,
+        message: json.message || 'Payment Required',
+        customers: []
+      }, { status: json.status });
+    }
 
-        return NextResponse.json({
-            error: false,
-            customers: json.clients ?? [],
-        }, { status: json.status });
+    return NextResponse.json({
+      error: false,
+      customers: json.clients ?? [],
+      total: json.total,
+      limit: json.limit,
+      offset: json.offset
+    }, { status: json.status });
 
-    } catch (err: unknown) {
+  } catch (err: unknown) {
 
     return NextResponse.json(
       { ok: false, message: 'Unexpected error', detail: String(err) },
       { status: 500 }
     );
-    }
+  }
 }
 
 export async function POST(req: NextRequest) {
